@@ -45,7 +45,7 @@ class ReplayMemory(object):
         self.memory.append(Transition(*args))
 
     def sample(self, batch_size):
-        return random.sample(self.memory, batch_size)
+        return random.sample(enumerate(self.memory), batch_size)
 
     def __len__(self):
         return len(self.memory)
@@ -117,6 +117,8 @@ def optimize_model():
     # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
     # detailed explanation). This converts batch-array of Transitions
     # to Transition of batch-arrays.
+    indexes = [i[1] for i in transitions]
+    transitions = [i[0] for i in transitions]
     batch = Transition(*zip(*transitions))
 
     # Compute a mask of non-final states and concatenate the batch elements
